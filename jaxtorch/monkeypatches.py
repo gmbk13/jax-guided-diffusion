@@ -4,18 +4,16 @@
 import sys
 import jax
 import jax.numpy as jnp
-import jaxlib
 from jax.core import canonicalize_shape
 from jax.interpreters.xla import DeviceArray
-from jaxlib.xla_extension import DeviceArrayBase
 from einops import rearrange
 
 def register(**kwargs):
     for attr, fun in kwargs.items():
         if hasattr(jnp.zeros([]), attr):
-            print(f'Not monkeypatching DeviceArray and Tracer with `{attr}`, because that method is already implemented.', file=sys.stderr)
+            print(f'Not monkeypatching jax.Array and Tracer with `{attr}`, because that method is already implemented.', file=sys.stderr)
             continue
-        setattr(DeviceArrayBase, attr, fun)
+        setattr(jax.Array, attr, fun)
         setattr(DeviceArray, attr, fun)
         setattr(jax.core.Tracer, attr, fun)
 
